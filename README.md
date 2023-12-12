@@ -1,13 +1,14 @@
 # Pytorch-cifar100
 
 practice on cifar100 using pytorch
+change original code to multigpu training code
 
 ## Requirements
 
 This is my experiment eviroument
-- python3.6
-- pytorch1.6.0+cu101
-- tensorboard 2.2.2(optional)
+- ubuntu 22.04
+- python3.10
+- torch2.0.0 
 
 
 ## Usage
@@ -22,25 +23,15 @@ I will use cifar100 dataset from torchvision since it's more convenient, but I a
 kept the sample code for writing your own dataset module in dataset folder, as an
 example for people don't know how to write it.
 
-### 3. run tensorbard(optional)
-Install tensorboard
-```bash
-$ pip install tensorboard
-$ mkdir runs
-Run tensorboard
-$ tensorboard --logdir='runs' --port=6006 --host='localhost'
-```
 
-### 4. train the model
+### 3. train the model
 You need to specify the net you want to train using arg -net
 
 ```bash
 # use gpu to train vgg16
-$ python train.py -net vgg16 -gpu
+# you should change nproc_per_node and world_size  if more gpus
+$ torchrun --nproc_per_node=1 train.py -net vgg16 -gpu -world_size 1
 ```
-
-sometimes, you might want to use warmup training by set ```-warm``` to 1 or 2, to prevent network
-diverge during early training phase.
 
 The supported net args are:
 ```
